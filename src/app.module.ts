@@ -10,7 +10,7 @@ import { UserModule } from './user/user.module';
     TypeOrmModule.forRoot(typeormConfig),
     UserModule
   ],
-  controllers: [AppController, ],
+  controllers: [AppController,],
   providers: [],
 })
 export class AppModule {

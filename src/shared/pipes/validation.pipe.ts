@@ -8,7 +8,6 @@ import {
 } from '@nestjs/common';
 import { plainToClass } from 'class-transformer'
 import { validate } from 'class-validator'
-import { retry } from 'rxjs/operators'
 
 @Injectable()
 export class ValidationPipe implements PipeTransform<any> {
