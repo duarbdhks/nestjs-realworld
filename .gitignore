@@ -36,3 +36,10 @@ lerna-debug.log*
 #config files
 ormconfig.json
 src/config.ts
+
+# Env
+.env
+
+# Other
+package-lock.json
+/data/db/*
