@@ -14,19 +14,38 @@
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:cov": "jest --coverage",
-    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test": "jest --config=jest.json",
+    "test:watch": "jest --watch --config=jest.json",
+    "test:cov": "jest --config=jest.json --coverage --coverageDirectory=coverage",
+    "test:debug": "node --config=jest.json --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+    "test:e2e": "jest --config=jest.json --config ./test/jest-e2e.json"
+  },
+  "bugs": {
+    "url": "https://github.com/duarbdhks/nestjs-realworld/issues"
   },
   "dependencies": {
     "@nestjs/common": "^7.6.15",
     "@nestjs/core": "^7.6.15",
+    "@nestjs/microservices": "^7.6.17",
+    "@nestjs/swagger": "^4.8.0",
+    "@nestjs/typeorm": "^7.1.5",
+    "@nestjs/websockets": "^7.6.17",
     "@nestjs/platform-express": "^7.6.15",
+    "argon2": "^0.27.2",
+    "class-transformer": "^0.4.0",
+    "class-validator": "^0.13.1",
+    "crypto": "^1.0.1",
+    "crypto-js": "^4.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "passport-jwt": "^4.0.0",
+    "dotenv": "^10.0.0",
+    "slug": "^5.0.1",
+    "swagger-ui-express": "^4.1.6",
+    "typeorm": "^0.2.32",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
-    "rxjs": "^6.6.6"
+    "rxjs": "^6.6.6",
+    "pg": "^8.6.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^7.6.0",
