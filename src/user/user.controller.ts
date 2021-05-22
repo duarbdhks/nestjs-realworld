@@ -1,5 +1,7 @@
-import { Controller, Get } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger'
+import { Body, Controller, Get, Post, UsePipes } from '@nestjs/common';
+import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger'
+import { ValidationPipe } from '../shared/pipes/validation.pipe'
+import { CreateUserDto } from './dto'
 import { User } from './user.decorator'
 import { UserRO } from './user.interface'
 import { UserService } from './user.service'
@@ -10,10 +12,16 @@ import { UserService } from './user.service'
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Get()
+  @Get('')
   async findMe(@User('email') email: string): Promise<UserRO> {
-    console.log(email,'aaaaa')
     return this.userService.findByEmail(email)
+  }
+
+  @UsePipes(new ValidationPipe())
+  @ApiBody({ type: [CreateUserDto] })
+  @Post()
+  async create(@Body() userData: CreateUserDto) {
+    return this.userService.create(userData)
   }
 
 }
