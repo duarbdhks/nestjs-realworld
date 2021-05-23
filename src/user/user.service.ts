@@ -1,10 +1,11 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm'
 import { validate } from 'class-validator'
-import { getRepository, Repository } from 'typeorm'
-import { CreateUserDto } from './dto'
+import { DeleteResult, getRepository, Repository } from 'typeorm'
+import { CreateUserDto, LoginUserDto, UpdateUserDto } from './dto'
 import { UserEntity } from './user.entity'
 import { UserRO } from './user.interface'
+import * as argon2 from 'argon2'
 
 const jwt = require('jsonwebtoken')
 
@@ -17,6 +18,21 @@ export class UserService {
 
   async findAll(): Promise<UserEntity[]> {
     return await this.userRepository.find()
+  }
+
+  async findOne({ email, password }: LoginUserDto): Promise<UserEntity> {
+    const user = await this.userRepository.findOne({ email })
+    //유저가 존재하지 않을 시,
+    if (!user) {
+      return null;
+    }
+
+    //비밀번호가 일치할 시,
+    if (await argon2.verify(user.password, password)) {
+      return user;
+    }
+
+    return null
   }
 
   async create(userData: CreateUserDto): Promise<UserRO> {
@@ -50,6 +66,19 @@ export class UserService {
     }
   }
 
+  async update(id: number, userData: UpdateUserDto): Promise<UserEntity> {
+    let toUpdate = await this.userRepository.findOne({ id })
+    delete toUpdate.password
+    // delete toUpdate.favorites
+
+    let updated = Object.assign(toUpdate, userData)
+    return await this.userRepository.save(updated)
+  }
+
+  async delete(email: string): Promise<DeleteResult> {
+    return await this.userRepository.delete({ email })
+  }
+
   async findById(id: number): Promise<UserRO> {
     const user = await this.userRepository.findOne(id)
 
@@ -72,7 +101,7 @@ export class UserService {
     return this.buildUserRO(user)
   }
 
-  private generateToken(user: UserEntity) {
+  public generateToken(user: UserEntity) {
     let today = new Date()
     let exp = new Date(today)
     exp.setDate(today.getDate() + 60)
