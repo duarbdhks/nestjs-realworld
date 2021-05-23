@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpException, HttpStatus, Post, Put, UsePipes } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put, UsePipes } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger'
 import { ValidationPipe } from '../shared/pipes/validation.pipe'
 import { CreateUserDto, LoginUserDto, UpdateUserDto } from './dto'
@@ -40,6 +40,15 @@ export class UserController {
   @Post()
   async create(@Body() userData: CreateUserDto) {
     return this.userService.create(userData)
+  }
+
+  /**
+   * 유저 삭제
+   * @param email
+   */
+  @Delete(':email')
+  async delete(@Param('email') email) {
+    return this.userService.delete(email)
   }
 
   /**

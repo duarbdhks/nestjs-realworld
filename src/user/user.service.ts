@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm'
 import { validate } from 'class-validator'
-import { getRepository, Repository } from 'typeorm'
+import { DeleteResult, getRepository, Repository } from 'typeorm'
 import { CreateUserDto, LoginUserDto, UpdateUserDto } from './dto'
 import { UserEntity } from './user.entity'
 import { UserRO } from './user.interface'
@@ -66,13 +66,17 @@ export class UserService {
     }
   }
 
-  async update(id: number, userData: UpdateUserDto) {
+  async update(id: number, userData: UpdateUserDto): Promise<UserEntity> {
     let toUpdate = await this.userRepository.findOne({ id })
     delete toUpdate.password
     // delete toUpdate.favorites
 
     let updated = Object.assign(toUpdate, userData)
     return await this.userRepository.save(updated)
+  }
+
+  async delete(email: string): Promise<DeleteResult> {
+    return await this.userRepository.delete({ email })
   }
 
   async findById(id: number): Promise<UserRO> {
