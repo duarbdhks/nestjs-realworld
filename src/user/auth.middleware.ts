@@ -14,7 +14,6 @@ export class AuthMiddleware implements NestMiddleware {
       const token = (authHeaders as string).split(' ')[1]
       const decoded = jwt.verify(token, process.env.SECRET)
       const user = await this.userService.findById(decoded.id)
-      console.log(user,'duarbdhks')
 
       if (!user) {
         throw new HttpException('User Not found.', HttpStatus.UNAUTHORIZED)
